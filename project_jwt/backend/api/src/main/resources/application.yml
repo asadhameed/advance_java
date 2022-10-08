@@ -1,3 +1,6 @@
+jwt:
+  seret: "[a-zA-sdsfdsf.]@Ecds*#$#thosothisisworkingforme"
+
 server:
   port: 8081
 

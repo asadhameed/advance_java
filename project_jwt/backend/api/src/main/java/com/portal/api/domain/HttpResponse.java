@@ -1,12 +1,17 @@
 package com.portal.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
+
+import java.util.Date;
 
 public class HttpResponse {
     private  int code;
     private HttpStatus httpStatus;
     private String reason;
     private String message;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh-mm-ss", timezone = "Europe/Stockholm")
+    private Date timeStamp;
 
     public HttpResponse() {
     }
@@ -16,6 +21,7 @@ public class HttpResponse {
         this.httpStatus = httpStatus;
         this.reason = reason;
         this.message = message;
+        this.timeStamp = new Date();
     }
 
     public int getCode() {
@@ -48,5 +54,13 @@ public class HttpResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
