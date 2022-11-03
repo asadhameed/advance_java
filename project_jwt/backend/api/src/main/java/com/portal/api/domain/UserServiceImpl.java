@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,13 +36,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private  UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository =userRepository;
       //  this.passwordEncoder = passwordEncoder;
-        this.passwordEncoder = passwordEncoder;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private String enCodePassword(String password) {
-        return this.passwordEncoder.encode(password);
+        return this.bCryptPasswordEncoder.encode(password);
     }
 
     private String generatedPassword() {
@@ -113,13 +114,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USER_NAME  + currentUserName);
             }
 
-
-
             if(userByNewUserName != null && !currentUser.getId().equals(userByNewUserName.getUserId())){
                 throw new UserNameExistException(USER_ALREADY_EXISTS);
             }
-
-
 
             if(userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())){
                 throw new EmailExistException(USER_ALREADY_EXISTS);
@@ -127,12 +124,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return currentUser;
         } else{
 
-
             if(userByNewUserName != null ){
                 throw new UserNameExistException(USER_ALREADY_EXISTS);
             }
-
-
 
             if(userByNewEmail != null){
                 throw new EmailExistException(USER_ALREADY_EXISTS);

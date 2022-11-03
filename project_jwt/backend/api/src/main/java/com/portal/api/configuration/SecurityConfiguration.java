@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -32,7 +31,6 @@ public class SecurityConfiguration {
     private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Autowired
-
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Autowired
@@ -42,43 +40,13 @@ public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private  PasswordEncoder passwordEncoder;
-   // private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-//    @Autowired
-//    public SecurityConfiguration(JwtAuthorizationFilter jwtAuthorizationFilter, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, @Qualifier("UserDetailsService")UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
-//        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
-//        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-//        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-//        this.userDetailsService = userDetailsService;
-//       // this.passwordEncoder = passwordEncoder;
-//    }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//       // super.configure(auth);
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-//    }
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().cors().and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and().authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedHandler(this.jwtAccessDeniedHandler)
-//                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-//                .and()
-//                .addFilterBefore(this.jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//    }
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(this.userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return  authenticationProvider;
     }
 
@@ -97,6 +65,7 @@ public class SecurityConfiguration {
 
         return httpSecurity.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return  authenticationConfiguration.getAuthenticationManager();
