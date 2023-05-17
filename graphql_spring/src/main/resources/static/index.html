@@ -1,0 +1,18 @@
+<html>
+ <body>
+    <script type="text/javascript"   src="https://unpkg.com/graphql-ws@5.12.1/umd/graphql-ws.js"></script>
+        <script>
+            window.addEventListener('load', ()=>{
+                    const url = 'ws://localhost:8080/grapql'
+                    const client = graphqlWs.createClient({url:url})
+                    const q = ` subscription{  systemEvents { date, message}}`
+                    client.subscribe({ query :q} , {
+                     next: (data) =>{ console.log(data.data.systemEvents)},
+                     error: (ex) => {console.log("my e -" , ex)},
+                     complete: ()=>{console.log("complete")}
+                    })
+                });
+                console.log("hell");
+        </script>
+ </body>
+</html>

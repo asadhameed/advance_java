@@ -1,0 +1,29 @@
+type Query{
+    customers: [Customer]
+    hello: String
+}
+
+type Subscription {
+    systemEvents: SystemEvent
+}
+
+type SystemEvent{
+    message: String
+    date: String
+}
+
+type Mutation{
+ addCustomer(name: String): Customer
+ deleteCustomer(id:ID): String
+}
+type Customer{
+    id: ID
+    name: String
+    enrollment: String
+    orders: [Order]
+}
+
+type Order{
+    id:ID
+    customerId: ID
+}
